@@ -1,140 +1,232 @@
-import React, { useState } from 'react';
+import React from 'react';
+import Layout from './Layout';
 import { 
-  Monitor, Wifi, BatteryMedium, ShieldAlert, 
-  MoreVertical, RotateCcw, XCircle, Search, Filter, ArrowUpRight 
+  Smartphone, Wifi, Battery, AlertTriangle, RefreshCw, Plus, 
+  Filter, MoreVertical, MapPin, Zap, Clock, RotateCcw, ShieldAlert,
+  ChevronLeft, ChevronRight
 } from 'lucide-react';
 
-export default function Devices() {
-  // Sample Data reflecting the image
-  const devices = [
-    { id: 'DEV-9081', outlet: 'Lagos Main Branch', status: 'Online', battery: '88%', lastSeen: '2 mins ago', model: 'Verifone V200c' },
-    { id: 'DEV-9082', outlet: 'Ikeja Digital Hub', status: 'Online', battery: '12%', lastSeen: 'Just now', model: 'Verifone V200c' },
-    { id: 'DEV-9083', outlet: 'Unassigned', status: 'Offline', battery: '0%', lastSeen: '5 hours ago', model: 'Pax S90' },
-    { id: 'DEV-9084', outlet: 'Victoria Island Office', status: 'Idle', battery: '54%', lastSeen: '12 mins ago', model: 'Verifone V200c' },
-    { id: 'DEV-9085', outlet: 'Lekki Phase 1 Outlet', status: 'Online', battery: '95%', lastSeen: '1 min ago', model: 'Pax S90' },
+export default function Devices(props) {
+  const deviceList = [
+    { id: 'DEV-9081', outlet: 'Lagos Main Branch', status: 'Online', battery: 83, seen: '2 mins ago' },
+    { id: 'DEV-9082', outlet: 'Ikeja Digital Hub', status: 'Online', battery: 95, seen: 'Just now' },
+    { id: 'DEV-9082', outlet: 'Unassigned', status: 'Critical', battery: 0, seen: 'Just now' },
+    { id: 'DEV-9083', outlet: 'Victoria Island Office', status: 'Idle', battery: 13, seen: '12 hours ago' },
+    { id: 'DEV-9085', outlet: 'Lekki Phase 1 Outlet', status: 'Online', battery: 93, seen: '1 min ago' },
   ];
 
   return (
-    <div style={{ width: '100%', animation: 'fadeIn 0.5s ease' }}>
-      {/* 1. HEADER SECTION */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '25px' }}>
+    <Layout {...props}>
+      {/* HEADER AREA */}
+      <div style={headerStyle}>
         <div>
           <h2 style={{ margin: 0, color: '#1e293b', fontSize: '24px' }}>Device Management</h2>
-          <p style={{ color: '#64748b', fontSize: '14px', marginTop: '4px' }}>
-            Monitor hardware health, assign outlets, and manage remote telemetry.
-          </p>
+          <p style={{ color: '#64748b', margin: '4px 0' }}>Monitor hardware health, assign outlets, and manage remote telemetry.</p>
         </div>
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <button style={secondaryBtnStyle}><RotateCcw size={16} /> Sync Status</button>
-          <button style={primaryBtnStyle}>+ Onboard Device</button>
+        <div style={{ display: 'flex', gap: '12px' }}>
+          <button style={whiteBtn}><RefreshCw size={16} /> Sync Status</button>
+          <button style={blueBtn}><Plus size={16} /> Onboard Device</button>
         </div>
       </div>
 
-      {/* 2. KPI SUMMARY CARDS */}
-      <div style={kpiGridStyle}>
-        <DeviceStatCard title="Active Fleet" value="1,240" sub="+12 this week" icon={<Monitor size={20} color="#007bff" />} />
-        <DeviceStatCard title="Connectivity" value="98.2%" sub="Fleet average" icon={<Wifi size={20} color="#007bff" />} />
-        <DeviceStatCard title="Critical Battery" value="14" sub="Action required" icon={<BatteryMedium size={20} color="#ef4444" />} isAlert />
-        <DeviceStatCard title="Pending Approvals" value="3" sub="In Checker queue" icon={<ShieldAlert size={20} color="#f59e0b" />} />
+      {/* TOP KPI CARDS */}
+      <div style={kpiGrid}>
+        <div style={statCard}>
+          <div style={statHeader}><span>Active Fleet</span> <div style={iconBlue}><Smartphone size={16} /></div></div>
+          <div style={statValue}>1,240 <span style={statLabel}>+12 this week</span></div>
+        </div>
+        <div style={statCard}>
+          <div style={statHeader}><span>Connectivity</span> <div style={iconBlue}><Wifi size={16} /></div></div>
+          <div style={statValue}>88% <span style={statLabel}>Net average</span></div>
+        </div>
+        <div style={statCard}>
+          <div style={statHeader}><span>Health Index</span> <div style={iconRed}><Zap size={16} /></div></div>
+          <div style={statValue}>92% <span style={statLabel}>Action required</span></div>
+        </div>
+        <div style={statCard}>
+          <div style={statHeader}><span>Critical Battery</span> <div style={iconRed}><Battery size={16} /></div></div>
+          <div style={statValue}>14 <span style={statLabel}>Action required</span></div>
+        </div>
       </div>
 
-      {/* 3. MAIN INVENTORY TABLE */}
-      <div style={tableContainerStyle}>
-        <div style={tableHeaderStyle}>
-          <div style={{ display: 'flex', gap: '20px' }}>
-            {['All Devices', 'Online', 'Offline', 'Unassigned'].map((tab, i) => (
-              <span key={tab} style={i === 0 ? activeTabStyle : tabStyle}>{tab}</span>
-            ))}
+      <div style={mainContentGrid}>
+        {/* LEFT COLUMN: TABLE */}
+        <div style={{ flex: 1 }}>
+          <div style={tabsRow}>
+            <div style={{ display: 'flex', gap: '20px' }}>
+              <span style={activeTab}>All Devices</span>
+              <span style={inactiveTab}>Online</span>
+              <span style={inactiveTab}>Offline</span>
+              <span style={inactiveTab}>Unassigned</span>
+            </div>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button style={filterBtn}><Filter size={14} /> Filters</button>
+              <button style={filterBtn}><RefreshCw size={14} /></button>
+            </div>
           </div>
-          <div style={{ display: 'flex', gap: '10px' }}>
-             <button style={filterBtnStyle}><Filter size={14} /> Filters</button>
-             <button style={filterBtnStyle}><ArrowUpRight size={14} /></button>
+
+          <div style={tableWrapper}>
+            <table style={deviceTable}>
+              <thead>
+                <tr style={tableHeadRow}>
+                  <th style={thStyle}>Device ID</th>
+                  <th style={thStyle}>Assigned Outlet</th>
+                  <th style={thStyle}>Status</th>
+                  <th style={thStyle}>Battery</th>
+                  <th style={thStyle}>Last Seen</th>
+                  <th style={thStyle}></th>
+                </tr>
+              </thead>
+              <tbody>
+                {deviceList.map((dev, i) => (
+                  <tr key={i} style={tableRow}>
+                    <td style={tdStyle}><strong>{dev.id}</strong></td>
+                    <td style={{ ...tdStyle, color: dev.outlet === 'Unassigned' ? '#ef4444' : '#1e293b' }}>
+                      {dev.outlet}
+                    </td>
+                    <td style={tdStyle}>
+                      {dev.status === 'Critical' ? <span style={critBadge}>Critical</span> : <span style={dotActive}></span>}
+                    </td>
+                    <td style={tdStyle}>
+                       <div style={{ display: 'flex', alignItems: 'center', gap: '5px', color: dev.battery < 15 ? '#ef4444' : '#64748b' }}>
+                          <Battery size={14} /> {dev.battery}%
+                       </div>
+                    </td>
+                    <td style={tdStyle}>{dev.seen}</td>
+                    <td style={tdStyle}><MoreVertical size={16} color="#94a3b8" /></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div style={paginationRow}>
+                <span style={{ fontSize: '13px', color: '#64748b' }}>Showing 5 of 1,240 results</span>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                    <button style={pageBtn}>Previous</button>
+                    <button style={pageBtn}>Next</button>
+                </div>
+            </div>
+          </div>
+
+          {/* SECURITY NOTICE BOX */}
+          <div style={noticeBox}>
+             <ShieldAlert size={20} color="#64748b" />
+             <div style={{ fontSize: '13px', color: '#475569' }}>
+                <strong>Security Protocol Notice:</strong> All critical device actions including remote registration and firmware rollback require secondary approval by a designated <strong>Checker</strong>.
+             </div>
           </div>
         </div>
 
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr style={{ borderBottom: '1px solid #e2e8f0', textAlign: 'left' }}>
-              <th style={thStyle}>Device ID</th>
-              <th style={thStyle}>Assigned Outlet</th>
-              <th style={thStyle}>Status</th>
-              <th style={thStyle}>Battery</th>
-              <th style={thStyle}>Last Seen</th>
-              <th style={thStyle}>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {devices.map((dev) => (
-              <tr key={dev.id} style={trStyle}>
-                <td style={{ ...tdStyle, fontWeight: 'bold' }}>{dev.id}</td>
-                <td style={{ ...tdStyle, color: dev.outlet === 'Unassigned' ? '#ef4444' : '#1e293b' }}>
-                  {dev.outlet}
-                </td>
-                <td style={tdStyle}>
-                  <span style={getStatusBadge(dev.status)}>{dev.status}</span>
-                </td>
-                <td style={tdStyle}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <BatteryMedium size={14} color={parseInt(dev.battery) < 20 ? '#ef4444' : '#22c55e'} />
-                    {dev.battery}
-                  </div>
-                </td>
-                <td style={tdStyle}>{dev.lastSeen}</td>
-                <td style={tdStyle}><MoreVertical size={16} cursor="pointer" color="#94a3b8" /></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+        {/* RIGHT COLUMN: DETAILS PANEL */}
+        <div style={detailsPanel}>
+          <div style={{ marginBottom: '20px' }}>
+            <h3 style={{ margin: 0, color: '#000000' }}>DEV-9081</h3>
+            <span style={{ fontSize: '12px', color: '#94a3b8' }}>SN-445021</span>
+          </div>
 
-      {/* 4. SECURITY NOTICE FOOTER */}
-      <div style={securityNoticeStyle}>
-        <ShieldAlert size={18} color="#475569" />
-        <p style={{ margin: 0, fontSize: '13px', color: '#475569' }}>
-          <strong>Security Protocol Notice:</strong> All critical device actions, including remote unregistration and firmware rollback, 
-          require secondary approval by a designated <strong>**Checker**</strong>. Pending actions will appear in the <strong>Approvals queue</strong>.
-        </p>
+          <div style={infoGrid}>
+            <div>
+                <div style={infoLabel}>MODEL</div>
+                <div style={infoVal}>Verifone V200c</div>
+            </div>
+            <div>
+                <div style={infoLabel}>FIRMWARE</div>
+                <div style={infoVal}>v2.4.1</div>
+            </div>
+          </div>
+
+          <div style={telemetryList}>
+            <div style={telItem}><MapPin size={16} /> <span>Current Outlet</span> <strong>Lagos Main Branch</strong></div>
+            <div style={telItem}><Zap size={16} /> <span>Power Level</span> <strong>88%</strong></div>
+            <div style={telItem}><Clock size={16} /> <span>Last Pulse</span> <strong>2 mins ago</strong></div>
+          </div>
+
+          <div style={{ marginTop: '30px' }}>
+            <h4 style={sectionTitle}>RECENT INTERACTIONS</h4>
+            <div style={timeline}>
+                <TimelineItem title="Remote Restart" desc="Triggered system reboot for troubleshooting" user="Admin Jalon" date="2024.02.18 14:41" />
+                <TimelineItem title="Offline" desc="Device disconnected from network" user="System" date="2024.02.16 12:46" />
+                <TimelineItem title="Firmware Update" desc="Auto-updated to version 2.5.0" user="System" date="2024.02.14 09:30" />
+            </div>
+          </div>
+
+          <div style={actionButtonsRow}>
+             <button style={restartBtn}><RotateCcw size={14} /> Restart</button>
+             <button style={unregBtn}><AlertTriangle size={14} /> Unregister</button>
+          </div>
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 }
 
-// --- SUB-COMPONENTS & STYLES ---
+// --- SUB-COMPONENTS ---
 
-function DeviceStatCard({ title, value, sub, icon, isAlert }) {
-  return (
-    <div style={kpiCardStyle}>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <span style={{ fontSize: '12px', color: '#64748b', fontWeight: '500' }}>{title}</span>
-        <div style={iconCircleStyle}>{icon}</div>
-      </div>
-      <div style={{ fontSize: '24px', fontWeight: 'bold', margin: '8px 0', color: '#1e293b' }}>{value}</div>
-      <div style={{ fontSize: '12px', color: isAlert ? '#ef4444' : '#94a3b8' }}>{sub}</div>
-    </div>
-  );
+function TimelineItem({ title, desc, user, date }) {
+    return (
+        <div style={tmItem}>
+            <div style={tmDot}></div>
+            <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: '600', fontSize: '13px' }}>{title}</div>
+                <div style={{ fontSize: '12px', color: '#64748b', marginBottom: '4px' }}>{desc}</div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#94a3b8' }}>
+                    <span>By {user}</span>
+                    <span>{date}</span>
+                </div>
+            </div>
+        </div>
+    );
 }
 
-// CSS-in-JS Styles
-const kpiGridStyle = { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', marginBottom: '30px' };
-const kpiCardStyle = { backgroundColor: 'white', padding: '20px', borderRadius: '12px', border: '1px solid #e2e8f0' };
-const iconCircleStyle = { width: '32px', height: '32px', borderRadius: '8px', backgroundColor: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center' };
-const tableContainerStyle = { backgroundColor: 'white', borderRadius: '12px', border: '1px solid #e2e8f0', overflow: 'hidden' };
-const tableHeaderStyle = { padding: '15px 20px', borderBottom: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' };
-const thStyle = { padding: '15px 20px', color: '#64748b', fontSize: '12px', fontWeight: '600', textTransform: 'uppercase' };
-const tdStyle = { padding: '15px 20px', fontSize: '14px', color: '#1e293b' };
-const trStyle = { borderBottom: '1px solid #f1f5f9' };
-const primaryBtnStyle = { backgroundColor: '#007bff', color: 'white', border: 'none', padding: '10px 18px', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' };
-const secondaryBtnStyle = { backgroundColor: 'white', border: '1px solid #e2e8f0', padding: '10px 18px', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', color: '#475569' };
-const tabStyle = { fontSize: '14px', color: '#64748b', cursor: 'pointer' };
-const activeTabStyle = { fontSize: '14px', color: '#007bff', fontWeight: '600', borderBottom: '2px solid #007bff', paddingBottom: '14px' };
-const filterBtnStyle = { padding: '8px', borderRadius: '6px', border: '1px solid #e2e8f0', backgroundColor: 'white', cursor: 'pointer', color: '#64748b' };
-const securityNoticeStyle = { marginTop: '25px', padding: '15px', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0', display: 'flex', gap: '12px', alignItems: 'center' };
+// --- STYLES ---
+const headerStyle = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' };
+const whiteBtn = { display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', backgroundColor: 'white', border: '1px solid #e2e8f0', borderRadius: '8px', cursor: 'pointer', fontWeight: '500', fontSize: '14px' };
+const blueBtn = { ...whiteBtn, backgroundColor: '#3b82f6', color: 'white', border: 'none' };
 
-const getStatusBadge = (status) => ({
-  padding: '4px 10px',
-  borderRadius: '20px',
-  fontSize: '12px',
-  fontWeight: '600',
-  backgroundColor: status === 'Online' ? '#dcfce7' : status === 'Offline' ? '#fee2e2' : '#fef9c3',
-  color: status === 'Online' ? '#166534' : status === 'Offline' ? '#991b1b' : '#854d0e',
-});
+const kpiGrid = { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '24px' };
+const statCard = { background: 'white', padding: '16px', borderRadius: '12px', border: '1px solid #e2e8f0' };
+const statHeader = { display: 'flex', justifyContent: 'space-between', fontSize: '14px', color: '#64748b', marginBottom: '8px' };
+const statValue = { fontSize: '22px', fontWeight: '700', color: '#1e293b' };
+const statLabel = { fontSize: '12px', color: '#94a3b8', fontWeight: '400', marginLeft: '8px' };
+
+const iconBlue = { width: '32px', height: '32px', borderRadius: '6px', background: '#eff6ff', color: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center' };
+const iconRed = { ...iconBlue, background: '#fef2f2', color: '#ef4444' };
+
+const mainContentGrid = { display: 'flex', gap: '24px', alignItems: 'flex-start' };
+const tabsRow = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px' };
+const activeTab = { color: '#ef4444', fontWeight: '600', borderBottom: '2px solid #ef4444', paddingBottom: '8px', fontSize: '14px', cursor: 'pointer' };
+const inactiveTab = { color: '#64748b', fontSize: '14px', cursor: 'pointer' };
+
+const filterBtn = { display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px', background: 'white', border: '1px solid #e2e8f0', borderRadius: '6px', fontSize: '13px', cursor: 'pointer' };
+
+const tableWrapper = { background: 'white', borderRadius: '12px', border: '1px solid #e2e8f0', overflow: 'hidden' };
+const deviceTable = { width: '100%', borderCollapse: 'collapse' };
+const tableHeadRow = { background: '#f8fafc', borderBottom: '1px solid #e2e8f0' };
+const thStyle = { padding: '12px 16px', textAlign: 'left', fontSize: '12px', color: '#64748b', textTransform: 'uppercase' };
+const tableRow = { borderBottom: '1px solid #f1f5f9' };
+const tdStyle = { padding: '16px', fontSize: '13px' };
+
+const critBadge = { background: '#ef4444', color: 'white', padding: '2px 8px', borderRadius: '12px', fontSize: '11px', fontWeight: '600' };
+const dotActive = { width: '8px', height: '8px', background: '#22c55e', borderRadius: '50%', display: 'inline-block' };
+
+const paginationRow = { padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#f8fafc' };
+const pageBtn = { padding: '6px 12px', background: 'white', border: '1px solid #e2e8f0', borderRadius: '6px', fontSize: '13px', cursor: 'pointer' };
+
+const noticeBox = { marginTop: '20px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '16px', display: 'flex', gap: '12px', alignItems: 'flex-start' };
+
+// RIGHT PANEL STYLES
+const detailsPanel = { width: '320px', background: 'white', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '20px', position: 'sticky', top: '20px' };
+const infoGrid = { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', background: '#f8fafc', padding: '12px', borderRadius: '8px' };
+const infoLabel = { fontSize: '10px', color: '#94a3b8', fontWeight: '600' };
+const infoVal = { fontSize: '13px', fontWeight: '600', color: '#1e293b' };
+
+const telemetryList = { marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '12px' };
+const telItem = { display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px', color: '#64748b' };
+const sectionTitle = { fontSize: '11px', color: '#94a3b8', letterSpacing: '0.5px', marginBottom: '15px' };
+
+const timeline = { position: 'relative', paddingLeft: '20px', borderLeft: '1px solid #e2e8f0' };
+const tmItem = { marginBottom: '20px', position: 'relative' };
+const tmDot = { position: 'absolute', left: '-24px', top: '4px', width: '8px', height: '8px', borderRadius: '50%', background: '#3b82f6', border: '2px solid white' };
+
+const actionButtonsRow = { marginTop: '24px', display: 'flex', gap: '10px', borderTop: '1px solid #f1f5f9', paddingTop: '20px' };
+const restartBtn = { flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '10px', border: '1px solid #e2e8f0', borderRadius: '8px', background: 'white', cursor: 'pointer', fontSize: '13px' };
+const unregBtn = { ...restartBtn, color: '#ef4444' };

@@ -1,18 +1,33 @@
 import React from 'react';
 import Layout from './Layout';
-import Agents from './Agents'; // Make sure this import is here!
+import Agents from './Agents'; // Import the new file
+import Devices from './Devices';
+import Report from './Report';
+import Compliance from './Compliance';
+
 import { User, Building2, Check, ShieldCheck } from 'lucide-react';
 
 export default function Dashboard(props) {
-  
-  // 1. THE SWITCHER LOGIC
-  // If the user clicked "Agents" in the sidebar, we return the Agents component instead
+  // If the user clicked "Agents" in the sidebar, show the Agents component instead
   if (props.currentPage === 'Agents') {
     return <Agents {...props} />;
   }
 
+  // 2. NEW: If the user clicked "Devices", show Devices component
+  if (props.currentPage === 'Devices') { // Ensure this is plural 'Devices'
+  return <Devices {...props} />;
+}
+
+if (props.currentPage === 'Compliance') { 
+    return <Compliance {...props} />; 
+  }
+
+  if (props.currentPage === 'Report') { 
+    return <Report {...props} />; 
+  }
+
+
   return (
-    /* We pass all props (including currentPage and setCurrentPage) to Layout here */
     <Layout {...props}>
       <div style={{ marginBottom: '25px' }}>
         <h2 style={{ margin: 0, color: '#1e293b' }}>System Dashboard</h2>

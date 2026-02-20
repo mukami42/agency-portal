@@ -10,7 +10,7 @@ export default function Layout({ children, username, role, branch, handleLogout,
     { name: 'Outlets', icon: <Check size={18} /> },
     { name: 'Commissions', icon: <Check size={18} /> },
     { name: 'Approvals', icon: <Check size={18} /> },
-    { name: 'Reports', icon: <Check size={18} /> },
+    { name: 'Report', icon: <Check size={18} /> },
     { name: 'Compliance', icon: <Check size={18} /> },
   ];
 
