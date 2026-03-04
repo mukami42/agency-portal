@@ -4,7 +4,6 @@ import Agents from './Agents'; // Import the new file
 import Devices from './Devices';
 import Report from './Report';
 import Compliance from './Compliance';
-
 import { User, Building2, Check, ShieldCheck } from 'lucide-react';
 
 export default function Dashboard(props) {
@@ -16,6 +15,9 @@ export default function Dashboard(props) {
   // 2. NEW: If the user clicked "Devices", show Devices component
   if (props.currentPage === 'Devices') { // Ensure this is plural 'Devices'
   return <Devices {...props} />;
+}
+ if (props.currentPage === 'Approval') { // Ensure this is plural 'Devices'
+  return <Approval {...props} />;
 }
 
 if (props.currentPage === 'Compliance') { 
