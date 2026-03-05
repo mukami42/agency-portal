@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { LogIn, RotateCcw, AlertTriangle, ShieldCheck, XCircle, Check } from 'lucide-react'
-// 1. IMPORT YOUR NEW FILE
 import Dashboard from './Dashboard.jsx' 
+import Approvals from './Approval.jsx' // IMPORT THE NEW FILE
 
 export default function App() {
   const [username, setUsername] = useState('');
@@ -12,6 +12,7 @@ export default function App() {
   const [dashboardVisible, setDashboardVisible] = useState(false); 
   const [role, setRole] = useState('');
   const [branch, setBranch] = useState('');
+  const [currentPage, setCurrentPage] = useState('Dashboard'); // Controls which page shows
 
   const handleReset = () => {
     setUsername('');
@@ -47,23 +48,37 @@ export default function App() {
     setDashboardVisible(false);
     setUsername('');
     setPassword('');
+    setCurrentPage('Dashboard'); // Reset to dashboard on logout
   };
 
-  // ... inside your App() component ...
-const [currentPage, setCurrentPage] = useState('Dashboard');
+  // --- LOGIC TO RENDER THE CORRECT COMPONENT ---
+  if (dashboardVisible) {
+    // If the sidebar clicks "Approvals", this condition will switch the view
+    if (currentPage === 'Approvals') {
+      return (
+        <Approvals 
+          username={username} 
+          role={role} 
+          branch={branch} 
+          handleLogout={handleLogout}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
+      );
+    }
 
-if (dashboardVisible) {
-  return (
-    <Dashboard 
-      username={username} 
-      role={role} 
-      branch={branch} 
-      handleLogout={handleLogout}
-      currentPage={currentPage}      // This tells the app which page is active
-      setCurrentPage={setCurrentPage} // This allows the sidebar to change the page
-    />
-  );
-}
+    // Default view: Dashboard
+    return (
+      <Dashboard 
+        username={username} 
+        role={role} 
+        branch={branch} 
+        handleLogout={handleLogout}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      />
+    );
+  }
 
   // --- SCREEN 2: SECURITY DISCLAIMER ---
   if (showDisclaimer && !isLoggedIn) {
@@ -128,7 +143,7 @@ if (dashboardVisible) {
           
           <div style={{ display: 'flex', gap: '12px', marginTop: '25px', justifyContent: 'flex-start' }}>
             <button 
-              onClick={() => setDashboardVisible(true)} // FIXED: Triggers automatic load
+              onClick={() => setDashboardVisible(true)}
               style={{ ...buttonStyle, backgroundColor: '#2d3436', flex: '0 1 120px' }}
             >
               <Check size={16} style={{ marginRight: '8px', color: '#2ecc71' }} /> Select
@@ -146,8 +161,7 @@ if (dashboardVisible) {
   }
 
   // --- SCREEN 1: LOGIN ---
-  
- return (
+  return (
     <div style={containerStyle}>
       <div style={cardStyle}>
         <div style={{ marginBottom: '30px' }}>
@@ -205,10 +219,9 @@ if (dashboardVisible) {
       </div>
     </div>
   )
-
 }
 
-// --- STYLES (login) ---
+// --- STYLES ---
 const containerStyle = { display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', width: '100vw', backgroundColor: '#E0F4FF', fontFamily: '"Segoe UI", sans-serif' };
 const cardStyle = { backgroundColor: 'white', padding: '45px', width: '420px', borderRadius: '2px', boxShadow: '0 15px 35px rgba(0,0,0,0.05)', border: '1px solid #f0f0f0' };
 const inputGroupStyle = { display: 'flex', flexDirection: 'column', gap: '6px' };
@@ -218,8 +231,5 @@ const buttonStyle = { display: 'flex', alignItems: 'center', justifyContent: 'ce
 const tableStyle = { width: '100%', borderCollapse: 'collapse', marginTop: '10px', fontSize: '13px', border: '1px solid #ddd' };
 const thStyle = { border: '1px solid #ddd', padding: '10px', textAlign: 'left', color: '#333', fontWeight: '600' };
 const tdStyle = { border: '1px solid #ddd', padding: '10px', backgroundColor: '#f1f8ff' };
-
-// RADIO STYLES for BUSINESS UNIT ROLE SELECTION
 const radioOuterStyle = { width: '16px', height: '16px', borderRadius: '50%', border: '2px solid #007bff', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: 'auto' };
 const radioInnerStyle = { width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#007bff' };
-
